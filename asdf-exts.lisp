@@ -28,10 +28,3 @@
     ((operation asdf:compile-op) (file asdf:cl-source-file))
   (%w/nicks file #'call-next-method))
 
-(defmethod asdf:perform :around
-    ((operation asdf:compile-op) (file asdf:cl-source-file))
-  (%w/nicks file #'call-next-method))
-
-(defmethod asdf:perform :around
-    ((operation asdf:compile-op) (file asdf:cl-source-file))
-  (%w/nicks file #'call-next-method))
