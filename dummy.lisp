@@ -1,0 +1,2 @@
+
+(setf cl::*marco* :polo)

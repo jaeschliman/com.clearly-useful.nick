@@ -1,0 +1,37 @@
+
+Proof of concept for system-local nicknames for packages
+
+Actually doing this right could be a lot of work, I'm just
+putting this out there now in case anyone finds it interesting.
+I'll be working on it and dogfooding it with personal projects
+when I have the time, but it's strictly experimental for now.
+
+It works by checking for a property in system definitions, that when
+found provides a list of (package-name nickname package-name nickname
+..etc) the user would like to be in effect during loading and
+compiling of their system.
+
+If such a property is found, it then ensures that the nicknames
+requested are bound to the packages requested during load and compile
+of the user's system files, and returns things to normal afterwards.
+
+It's really simpler than I'm making it
+sound, check the dummy.asd file & dummy.lisp, and test.lisp.
+And by simple, I mean little in the way of error checking
+etc. The included test does however load a system with the
+package-name :cl bound to something other than common lisp,
+and works as expected.
+
+What it can do, now:
+-  ensure that an existing package is bound to a requested
+   nickname for the duration of a system load, and return
+   names to their prior state afterwards.
+What it can't yet, but will do:
+-  ensure that given nicknames are /available/ for the duration
+   of a system load (to be used internally) and then cleared
+   or restored afterwards.
+   
+To be truly useful, this would require a SLIME contrib as well.
+
+This has been trivially tested in sbcl, ccl, and allegro free edition,
+and by trivially, I mean only insofar as shown in test.lisp. 
