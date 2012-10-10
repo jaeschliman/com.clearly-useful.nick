@@ -1,5 +1,11 @@
 (in-package :com.clearly-useful.nick)
 
+#+ecl
+(ffi:defcbody %package-locked-p (ffi:object) ffi:object
+	      "(si_coerce_to_package((#0))->pack.locked) ? ECL_T : ECL_NIL ")
+#+ecl
+(compile '%package-locked-p)
+
 ;;;;; some compat functions from elliottjohnson's project
 ;; slightly modifitted
 
@@ -35,7 +41,8 @@
       #+cmucl (values (ext:package-lock pkg)
 		      (ext:package-definition-lock pkg))
       #+sb-package-locks (sb-ext:package-locked-p pkg)
-      #-(or allegro clisp cmucl sb-package-locks) nil)))
+      #+ecl (%package-locked-p pkg)
+      #-(or allegro clisp cmucl sb-package-locks ecl) nil)))
 
 (defun lock-package (package)
   "Locks a provided package."
@@ -47,7 +54,8 @@
       #+cmucl (setf (ext:package-lock pkg) t
 		    (ext:package-definition-lock pkg) t)
       #+sb-package-locks (sb-ext:lock-package pkg)
-      #-(or allegro clisp cmucl sb-package-locks) nil)))
+      #+ecl (si:package-lock pkg t)
+      #-(or allegro clisp cmucl sb-package-locks ecl) nil)))
 
 (defun unlock-package (package)
   "Unlocks a provided package."
@@ -59,7 +67,8 @@
       #+cmucl (setf (ext:package-lock pkg) nil
 		    (ext:package-definition-lock pkg) nil)
       #+sb-package-locks (sb-ext:unlock-package pkg)
-      #-(or allegro clisp cmucl sb-package-locks) nil)))
+      #+ecl (si:package-lock pkg nil)
+      #-(or allegro clisp cmucl sb-package-locks ecl) nil)))
 
 ;;;;; --snip--
 
